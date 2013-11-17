@@ -12,7 +12,7 @@ class ChatController < ApplicationController
   def chat
     hijack do |tubesock|
       redis_thread = Thread.new do
-        Redis.new.subscribe "chat" do |on|
+        REDIS.new.subscribe "chat" do |on|
           on.message do |channel, message|
             tubesock.send_data message
           end
@@ -25,7 +25,7 @@ class ChatController < ApplicationController
       tubesock.onmessage do |data|
         #@message = Message.new(:username => session[:username], :message => data)
         #if @message.save
-        Redis.new.publish "chat", data
+        REDIS.new.publish "chat", data
         #end
       end
 
