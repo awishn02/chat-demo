@@ -1,0 +1,48 @@
+<pre id="chat">
+</pre>
+
+<form id="user_form" style="display:none">
+  <input type="text" id="username" placeholder="Username"/>
+  <input type="submit" value="Submit">
+</form>
+
+<form id="form">
+  <input type="text" id="msg" placeholder="Message..."/>
+  <input type="submit" value="Submit">
+</form>
+
+<script>
+$(document).ready(function(){
+  var ws = new WebSocket("ws://"+location.host+"/chat/chat");
+  ws.onmessage = function(e) {$("#chat").append(e.data + "\n")};
+
+  //var username = sessionStorage.username;
+  var username = '<%= session[:username] %>';
+  console.log(username);
+  if (!username){
+    $("#user_form").show();
+    $("#form").hide();
+  }
+
+  $("#user_form").submit(function(e){
+    //sessionStorage.username = $("#username").val();
+    $.ajax({
+      url: "/chat/setUser",
+      type: "POST",
+      data: {"username": $("#username").val()},
+      success: function(){
+        $("#user_form").hide();
+        $("#form").show();
+      }
+    })
+    e.preventDefault()
+  });
+
+  $("#form").submit(function(e){
+    var message = $("#msg").val();
+    ws.send(message);
+    $("#msg").val('');
+    e.preventDefault();
+  });
+})
+</script>
