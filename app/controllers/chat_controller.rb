@@ -15,7 +15,9 @@ class ChatController < ApplicationController
       redis_thread = Thread.new do
         Redis.new(:host => uri.host, :port => uri.port, :password => uri.password).subscribe "chat" do |on|
           on.message do |channel, message|
-            tubesock.send_data message
+            data = message.split(",")
+            puts message
+            tubesock.send_data "#{data[1]}: #{data[0]}"
           end
         end
       end
@@ -26,7 +28,7 @@ class ChatController < ApplicationController
       tubesock.onmessage do |data|
         #@message = Message.new(:username => session[:username], :message => data)
         #if @message.save
-        Redis.new(:host => uri.host, :port => uri.port, :password => uri.password).publish "chat", data
+        Redis.new(:host => uri.host, :port => uri.port, :password => uri.password).publish "chat", "#{data},#{session[:username]}"
         #end
       end
 
