@@ -33,4 +33,5 @@ ChatDemo::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+  ENV["REDISTOGO_URL"] = "redis://redistogo:15319dfc1e4014a747b5f5883c35d45d@grideye.redistogo.com:9190"
 end
