@@ -10,9 +10,10 @@ class ChatController < ApplicationController
   end
   
   def chat
+   uri = URI.parse(ENV["REDISTOGO_URL"]) 
     hijack do |tubesock|
       redis_thread = Thread.new do
-        REDIS.new.subscribe "chat" do |on|
+        Redis.new(:host => uri.host, :port => uri.port, :password => uri.password).subscribe "chat" do |on|
           on.message do |channel, message|
             tubesock.send_data message
           end
@@ -25,7 +26,7 @@ class ChatController < ApplicationController
       tubesock.onmessage do |data|
         #@message = Message.new(:username => session[:username], :message => data)
         #if @message.save
-        REDIS.new.publish "chat", data
+        Redis.new(:host => uri.host, :port => uri.port, :password => uri.password).publish "chat", data
         #end
       end
 
