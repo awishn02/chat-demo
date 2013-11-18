@@ -1,9 +1,8 @@
 == README : Chat-Demo
 
-This is a demo app for Web Engineering Final Project. \n
-Aaron Wishnick
-Andrew Jenkins
-Kei Sato
+This is a demo app for Web Engineering Final Project.
+
+Aaron Wishnick, Andrew Jenkins, Kei Sato
 
 What's in here:
 
